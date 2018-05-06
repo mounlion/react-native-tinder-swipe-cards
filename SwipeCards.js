@@ -548,8 +548,14 @@ export default class SwipeCards extends Component {
                   {this.renderYup()}
               </View>
               {this.props.footer({
-                  forceLeftSwipe: () => this._forceLeftSwipe(),
-                  forceRightSwipe: () => this._forceRightSwipe(),
+                  forceLeftSwipe: () => Promise.all([
+                      this._forceLeftSwipe(),
+                      this.props.handleNope(this.state.card)
+                  ]),
+                  forceRightSwipe: () => Promise.all([
+                      this._forceRightSwipe(),
+                      this.props.handleYup(this.state.card)
+                  ]),
                   forceUpSwipe: () => this._forceUpSwipe()
               })}
           </View>
