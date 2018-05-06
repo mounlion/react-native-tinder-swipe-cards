@@ -11,7 +11,8 @@ import {
   Animated,
   PanResponder,
   Dimensions,
-  Image
+  Image,
+    TouchableOpacity
 } from 'react-native';
 
 import clamp from 'clamp';
@@ -96,6 +97,7 @@ export default class SwipeCards extends Component {
     handleNope: PropTypes.func,
     yupText: PropTypes.string,
     yupView: PropTypes.element,
+    footer: PropTypes.func,
     maybeText: PropTypes.string,
     maybeView: PropTypes.element,
     nopeText: PropTypes.string,
@@ -536,13 +538,22 @@ export default class SwipeCards extends Component {
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        {this.props.stack ? this.renderStack() : this.renderCard()}
-        {this.renderNope()}
-        {this.renderMaybe()}
-        {this.renderYup()}
-      </View>
-    );
+
+      return (
+          <View style={{flex: 1}}>
+              <View style={styles.container}>
+                  {this.props.stack ? this.renderStack() : this.renderCard()}
+                  {this.renderNope()}
+                  {this.renderMaybe()}
+                  {this.renderYup()}
+              </View>
+              {this.props.footer({
+                  forceLeftSwipe: () => this._forceLeftSwipe(),
+                  forceRightSwipe: () => this._forceRightSwipe(),
+                  forceUpSwipe: () => this._forceUpSwipe()
+              })}
+          </View>
+      )
   }
+
 }
