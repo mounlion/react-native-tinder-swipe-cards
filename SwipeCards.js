@@ -569,7 +569,8 @@ export default class SwipeCards extends Component {
                       this._forceLeftSwipe(),
                       this.props.handleNope(this.state.card)
                   ]),
-                  forceUpSwipe: () => this._forceUpSwipe()
+                  forceUpSwipe: () => this._forceUpSwipe(),
+                  getCard: () => this.state.card
               })}
           </View>
       )
