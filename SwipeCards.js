@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent',
+    // backgroundColor: 'red',
+    //   paddingTop: 146
   },
   yup: {
     borderColor: 'green',
@@ -318,6 +319,17 @@ export default class SwipeCards extends Component {
 
   componentDidMount() {
     this._animateEntrance();
+
+      if (this.cardAnimation) {
+          this.cardAnimation.stop();
+          this.cardAnimation = null;
+      }
+
+      currentIndex[this.guid] = 0;
+      this.setState({
+          cards: [].concat(this.props.cards),
+          card: this.props.cards[0]
+      });
   }
 
   _animateEntrance() {
@@ -328,19 +340,20 @@ export default class SwipeCards extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.cards !== this.props.cards) {
+    if (nextProps.cards !== this.props.cards && !this.state.cards.length) {
+      
+        if (this.cardAnimation) {
+            this.cardAnimation.stop();
+            this.cardAnimation = null;
+        }
 
-      if (this.cardAnimation) {
-        this.cardAnimation.stop();
-        this.cardAnimation = null;
-      }
-
-      currentIndex[this.guid] = 0;
-      this.setState({
-        cards: [].concat(nextProps.cards),
-        card: nextProps.cards[0]
-      });
+        currentIndex[this.guid] = 0;
+        this.setState({
+            cards: [].concat(nextProps.cards),
+            card: nextProps.cards[0]
+        });
     }
+
   }
 
   _resetPan() {
@@ -549,12 +562,12 @@ export default class SwipeCards extends Component {
               </View>
               {this.props.footer({
                   forceLeftSwipe: () => Promise.all([
-                      this._forceLeftSwipe(),
-                      this.props.handleNope(this.state.card)
-                  ]),
-                  forceRightSwipe: () => Promise.all([
                       this._forceRightSwipe(),
                       this.props.handleYup(this.state.card)
+                  ]),
+                  forceRightSwipe: () => Promise.all([
+                      this._forceLeftSwipe(),
+                      this.props.handleNope(this.state.card)
                   ]),
                   forceUpSwipe: () => this._forceUpSwipe()
               })}
